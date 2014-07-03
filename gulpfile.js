@@ -16,7 +16,7 @@ var gulp = require('gulp'),
 gulp.task('lint', function() {
   return gulp.src('angular-app/**/*.js')
       .pipe(jshint())
-      .pipe(jshint.reporter('jshint-stylish'));
+      .pipe(jshint.reporter('default'));
 });
 
 gulp.task('compile-js', function() {

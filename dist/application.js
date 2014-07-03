@@ -250,8 +250,13 @@ angular.module('Transmissions')
         return new Date(str.slice(0, 4), str.slice(4, 6), str.slice(6, 8), str.slice(8, 10), str.slice(10, 12), str.slice(12, 14));
       }
 
-      var bucketsObject = {},
-          i = sorted.length - 1;
+      function sortByMMSI(a, b) {
+        return indices[a.mmsi] - indices[b.mmsi];
+      }
+
+      var bucketsObject = {};
+
+      i = sorted.length - 1;
       do {
         var key = sorted[i].bucket;
         bucketsObject[key] = bucketsObject[key] || {};
@@ -262,38 +267,38 @@ angular.module('Transmissions')
           keys = sortedIntKeys(bucketsObject),
           a = {},
           counter = 0,
-          indices = {},
-          i = keys.length - 1;
+          indices = {};
 
+      i = keys.length - 1;
       do {
         var b = clone(a);
         var active = [];
         for (var k in bucketsObject[keys[i]]) {
           var h = bucketsObject[keys[i]][k];
-          indices[h.mmsi] = indices[h.mmsi] || (function() { counter = counter + 1; return counter; })();
+          indices[h.mmsi] = indices[h.mmsi] || (counter = counter + 1);
           b[h.mmsi] = h;
           active.push(h.mmsi);
         }
 
         var bkeys = Object.keys(b);
         var array = [];
-        for (var j = 0; j < bkeys.length; j++) {
+        for (j = 0; j < bkeys.length; j++) {
           array.push(b[bkeys[j]]);
         }
         bucketsArray.push({
           timestamp: parseDateTime(keys[i]),
-          transmissions: array.sort(function(a,b) { return indices[a.mmsi] - indices[b.mmsi]; }),
+          transmissions: array.sort(sortByMMSI),
           active: active
         });
         a = b;
       } while(i--);
 
-      var array = [];
-      for (var key in compressedSeries) {
-        array.push(compressedSeries[key]);
+      var compressedSeriesArray = [];
+      for (var myKey in compressedSeries) {
+        compressedSeriesArray.push(compressedSeries[myKey]);
       }
       return {
-        compressed: array,
+        compressed: compressedSeriesArray,
         buckets: bucketsArray
       };
     }
