@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('Visualizations')
-  /* @ngInject */
   .directive('vesselTracking', function($filter, $timeout, TransmissionsService, setupD3) {
     var timeSeries = TransmissionsService.timeSeries;
     var index, svg, setup;

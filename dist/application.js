@@ -1,3 +1,4 @@
+(function(window, document) {
 'use strict';
 
 angular.module('Utils', [])
@@ -54,7 +55,6 @@ angular.module('Utils', [])
 'use strict';
 
 angular.module('ScatterPlot',['Utils'])
-  /* @ngInject */
   .directive('ocScatterPlot', ['$filter', 'setupD3', function($filter, setupD3) {
     function link(scope, element, attributes) {
       var svg = d3.select(element[0]).select('svg');
@@ -118,7 +118,6 @@ angular.module('Transmissions', ['Utils'])
 'use strict';
 
 angular.module('Maps', ['Transmissions'])
-  /* @ngInject */
   .controller('MapsController', ['$scope', '$timeout', '$rootScope', 'TransmissionsService', function($scope, $timeout, $rootScope, TransmissionsService) {
     $scope.width = 1000;
     $scope.height = 500;
@@ -171,7 +170,6 @@ angular.module('Maps', ['Transmissions'])
 'use strict';
 
 angular.module('Transmissions')
-  /* @ngInject */
   .service('TransmissionsService', ['$http', 'Transmission', 'clone', function($http, Transmission, clone) {
     var self = this;
     self.transmissions = [];
@@ -316,7 +314,6 @@ angular.module('Visualizations', ['Transmissions', 'Utils']);
 'use strict';
 
 angular.module('App', ['Transmissions', 'ScatterPlot', 'Visualizations', 'Maps', 'ngRoute'])
-  /* @ngInject */
   .config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/track', { templateUrl: 'views/track.html' })
         .when('/routes', { templateUrl: 'views/routes.html' })
@@ -345,7 +342,6 @@ angular.module('App', ['Transmissions', 'ScatterPlot', 'Visualizations', 'Maps',
 
 'use strict';
 
-/* @ngInject */
 angular.module('Visualizations')
   .directive('routeTrace', ['TransmissionsService', 'setupD3', function(TransmissionsService, setupD3) {
     var compressedSeries = TransmissionsService.compressedSeries;
@@ -389,7 +385,6 @@ angular.module('Visualizations')
 'use strict';
 
 angular.module('Visualizations')
-    /* @ngInject */
     .directive('transmissionsFrequency', ['TransmissionsService', 'setupD3', function(TransmissionsService, setupD3) {
       var transmissions = TransmissionsService.transmissions;
       var setup, svg;
@@ -424,7 +419,6 @@ angular.module('Visualizations')
 'use strict';
 
 angular.module('Visualizations')
-  /* @ngInject */
   .directive('vesselTracking', ['$filter', '$timeout', 'TransmissionsService', 'setupD3', function($filter, $timeout, TransmissionsService, setupD3) {
     var timeSeries = TransmissionsService.timeSeries;
     var index, svg, setup;
@@ -546,8 +540,9 @@ angular.module('Visualizations')
     };
   }]);
 
-angular.module("App").run(["$templateCache", function($templateCache) {$templateCache.put("views/graphs.html","<transmissions-frequency oc-bounds=\"bounds\" oc-width=\"width\" oc-height=\"height\"></transmissions-frequency>\n");
-$templateCache.put("views/routes.html","<route-trace oc-width=\"width\" oc-height=\"height\" oc-bounds=\"bounds\"></route-trace>\n");
+angular.module("App").run(["$templateCache", function($templateCache) {$templateCache.put("views/graphs.html","<transmissions-frequency data-oc-bounds=\"bounds\" data-oc-width=\"width\" data-oc-height=\"height\"></transmissions-frequency>\n");
+$templateCache.put("views/routes.html","<route-trace data-oc-width=\"width\" data-oc-height=\"height\" data-oc-bounds=\"bounds\"></route-trace>\n");
 $templateCache.put("views/track.html","<vessel-tracking oc-width=\"width\" oc-height=\"height\" oc-bounds=\"bounds\"></vessel-tracking>\n");
 $templateCache.put("visualizations/transmissions-frequency.html","<svg></svg>\n");
 $templateCache.put("visualizations/vessel-tracking.html","<svg>\n  <g transform=\"translate(10, 25)\">\n    <text class=\"timestamp\"></text>\n  </g>\n</svg>\n");}]);
+})(window, document);

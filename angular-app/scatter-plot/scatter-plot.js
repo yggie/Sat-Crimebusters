@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('ScatterPlot',['Utils'])
-  /* @ngInject */
   .directive('ocScatterPlot', function($filter, setupD3) {
     function link(scope, element, attributes) {
       var svg = d3.select(element[0]).select('svg');

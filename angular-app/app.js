@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('App', ['Transmissions', 'ScatterPlot', 'Visualizations', 'Maps', 'ngRoute'])
-  /* @ngInject */
   .config(function($routeProvider) {
     $routeProvider.when('/track', { templateUrl: 'views/track.html' })
         .when('/routes', { templateUrl: 'views/routes.html' })

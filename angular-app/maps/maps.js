@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('Maps', ['Transmissions'])
-  /* @ngInject */
   .controller('MapsController', function($scope, $timeout, $rootScope, TransmissionsService) {
     $scope.width = 1000;
     $scope.height = 500;

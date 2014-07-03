@@ -3,9 +3,12 @@
 var gulp = require('gulp'),
     jshint = require('gulp-jshint'),
     sass = require('gulp-sass'),
+    wrapper = require('gulp-wrapper'),
     templateCache = require('gulp-angular-templatecache'),
+    angularHtmlify = require('gulp-angular-htmlify'),
     angularFilesort = require('gulp-angular-filesort'),
     ngAnnotate = require('gulp-ng-annotate'),
+    notify = require('gulp-notify'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
     rename = require('gulp-rename');
@@ -13,7 +16,7 @@ var gulp = require('gulp'),
 gulp.task('lint', function() {
   return gulp.src('angular-app/**/*.js')
       .pipe(jshint())
-      .pipe(jshint.reporter('default'));
+      .pipe(jshint.reporter('jshint-stylish'));
 });
 
 gulp.task('compile-js', function() {
@@ -24,25 +27,36 @@ gulp.task('compile-js', function() {
         add: true,
         single_quotes: true
       }))
+      .pipe(wrapper({
+        header: '(function(window, document) {\n',
+        footer: '\n})(window, document);'
+      }))
       .pipe(gulp.dest('dist'))
       .pipe(rename('application.min.js'))
       .pipe(uglify())
-      .pipe(gulp.dest('dist'));
+      .pipe(gulp.dest('dist'))
+      .pipe(notify('Javascript compilation completed successfully'));
 });
 
 gulp.task('compile-templates', function() {
   return gulp.src('angular-app/**/*.html')
+      .pipe(angularHtmlify({
+        verbose: false,
+        customPrefixes: ['oc-']
+      }))
       .pipe(templateCache('templates.js', {
         module: 'App'
       }))
-      .pipe(gulp.dest('tmp'));
+      .pipe(gulp.dest('tmp'))
+      .pipe(notify('Angular template compilation completed successfully'));
 });
 
 gulp.task('sass', function() {
   return gulp.src('angular-app/**/*.scss')
       .pipe(sass())
       .pipe(concat('application.css'))
-      .pipe(gulp.dest('dist'));
+      .pipe(gulp.dest('dist'))
+      .pipe(notify('SASS compilation completed successfully'));
 });
 
 gulp.task('watch', function() {
@@ -51,4 +65,4 @@ gulp.task('watch', function() {
   gulp.watch('angular-app/**/*.scss', ['sass']);
 });
 
-gulp.task('default', ['lint', 'compile-js', 'watch']);
+gulp.task('default', ['lint', 'compile-templates', 'compile-js', 'sass', 'watch']);

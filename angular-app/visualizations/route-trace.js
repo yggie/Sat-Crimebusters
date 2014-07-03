@@ -1,6 +1,5 @@
 'use strict';
 
-/* @ngInject */
 angular.module('Visualizations')
   .directive('routeTrace', function(TransmissionsService, setupD3) {
     var compressedSeries = TransmissionsService.compressedSeries;

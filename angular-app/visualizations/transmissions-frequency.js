@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('Visualizations')
-    /* @ngInject */
     .directive('transmissionsFrequency', function(TransmissionsService, setupD3) {
       var transmissions = TransmissionsService.transmissions;
       var setup, svg;

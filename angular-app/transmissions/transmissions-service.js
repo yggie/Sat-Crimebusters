@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('Transmissions')
-  /* @ngInject */
   .service('TransmissionsService', function($http, Transmission, clone) {
     var self = this;
     self.transmissions = [];
